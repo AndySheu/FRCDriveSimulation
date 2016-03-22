@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 public class Robot extends IterativeRobot {
 
-	Victor v0 = new Victor(0);
-	Victor v1 = new Victor(1);
+	Victor v0 = new Victor(2);
+	Victor v1 = new Victor(3);
 	RobotDrive botDrive = new RobotDrive(v0, v1);
 
 	Joystick leftJoy;
