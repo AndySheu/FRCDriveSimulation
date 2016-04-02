@@ -101,8 +101,9 @@ public class Robot extends IterativeRobot {
 
 		// Apply reverse front
 		if (reverseFront) {
-			leftDriveSpeed *= -1;
-			rightDriveSpeed *= -1;
+			double temp = leftDriveSpeed;
+			leftDriveSpeed = -rightDriveSpeed;
+			rightDriveSpeed = -temp;
 		}
 
 		System.out.println("LS: " + leftDriveSpeed);
