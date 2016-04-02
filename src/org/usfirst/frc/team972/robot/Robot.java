@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 public class Robot extends IterativeRobot {
 
-	Victor v0 = new Victor(2);
-	Victor v1 = new Victor(3);
-	RobotDrive botDrive = new RobotDrive(v0, v1);
+	Victor v0 = new Victor(0);
+	Victor v1 = new Victor(1);
+	Victor v2 = new Victor(2);
+	Victor v3 = new Victor(3);
+	RobotDrive botDrive = new RobotDrive(v0, v1, v2, v3);
 
 	Joystick leftJoy;
 	Joystick rightJoy;
@@ -22,7 +24,12 @@ public class Robot extends IterativeRobot {
 	boolean squaredInputs = true, squaredPressedLastTime = false;
 
 	boolean joystick = true;
-
+	
+	public void robotInit() {
+//		v2.setInverted(true);
+//		v3.setInverted(true);
+	}
+	
 	public void teleopInit() {
 		if (joystick) {
 			leftJoy = new Joystick (0);
@@ -44,7 +51,7 @@ public class Robot extends IterativeRobot {
 			rightDriveSpeed = rightJoy.getY();
 			gearshiftPressed = rightJoy.getRawButton(1);
 			reversePressed = leftJoy.getRawButton(1);
-			squaredPressed = leftJoy.getRawButton(1);
+			squaredPressed = leftJoy.getRawButton(2);
 		} else {
 			// Doesn't actually work
 			leftDriveSpeed = leftJoy.getY();
