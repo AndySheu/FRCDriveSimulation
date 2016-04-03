@@ -6,14 +6,15 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
-	Victor v0 = new Victor(0);
-	Victor v1 = new Victor(1);
-	Victor v2 = new Victor(2);
-	Victor v3 = new Victor(3);
-	RobotDrive botDrive = new RobotDrive(v0, v1, v2, v3);
+	Victor fl = new Victor(0);
+	Victor rl = new Victor(1);
+	Victor fr = new Victor(2);
+	Victor rr = new Victor(3);
+	RobotDrive botDrive = new RobotDrive(fl, rl, fr, rr);
 
 	Joystick leftJoy;
 	Joystick rightJoy;
@@ -24,17 +25,17 @@ public class Robot extends IterativeRobot {
 	boolean squaredInputs = true, squaredPressedLastTime = false;
 
 	boolean joystick = true;
-	
+
 	public void robotInit() {
-//		v2.setInverted(true);
-//		v3.setInverted(true);
+		// v2.setInverted(true);
+		// v3.setInverted(true);
 	}
-	
+
 	public void teleopInit() {
 		if (joystick) {
-			leftJoy = new Joystick (0);
-			rightJoy = new Joystick (1);
-			joy = new Joystick (2);
+			leftJoy = new Joystick(0);
+			rightJoy = new Joystick(1);
+			joy = new Joystick(2);
 		}
 	}
 
@@ -47,8 +48,8 @@ public class Robot extends IterativeRobot {
 		boolean squaredPressed;
 
 		if (joystick) {
-			leftDriveSpeed = leftJoy.getY();
-			rightDriveSpeed = rightJoy.getY();
+			leftDriveSpeed = -leftJoy.getY();
+			rightDriveSpeed = -rightJoy.getY();
 			gearshiftPressed = rightJoy.getRawButton(1);
 			reversePressed = leftJoy.getRawButton(1);
 			squaredPressed = leftJoy.getRawButton(2);
@@ -60,6 +61,9 @@ public class Robot extends IterativeRobot {
 			reversePressed = leftJoy.getRawButton(1);
 			squaredPressed = leftJoy.getRawButton(1);
 		}
+
+		System.out.println("LJ " + leftDriveSpeed);
+		System.out.println("RJ " + rightDriveSpeed);
 
 		// Check gearshift
 		if (gearshiftPressed && !gearshiftPressedLastTime) {
@@ -100,14 +104,22 @@ public class Robot extends IterativeRobot {
 		}
 
 		// Apply reverse front
-		if (reverseFront) {
-			double temp = leftDriveSpeed;
-			leftDriveSpeed = -rightDriveSpeed;
-			rightDriveSpeed = -temp;
-		}
 
-		System.out.println("LS: " + leftDriveSpeed);
-		System.out.println("RS: " + rightDriveSpeed);
-		botDrive.tankDrive(leftDriveSpeed, rightDriveSpeed);
+		if (reverseFront) {
+			leftDriveSpeed = leftDriveSpeed * -1;
+			rightDriveSpeed = rightDriveSpeed * -1;
+			System.out.println("REVERSE");
+			System.out.println("LS: " + leftDriveSpeed);
+			System.out.println("RS: " + rightDriveSpeed);
+			botDrive.tankDrive(rightDriveSpeed, leftDriveSpeed);
+		} else {
+			System.out.println("LS: " + leftDriveSpeed);
+			System.out.println("RS: " + rightDriveSpeed);
+			botDrive.tankDrive(leftDriveSpeed, rightDriveSpeed);
+		}
+		
+		SmartDashboard.putBoolean("HIGH GEAR", highGear);
+		SmartDashboard.putBoolean("REVERSE FRONT", reverseFront);
+		SmartDashboard.putBoolean("SQUARED INPUTS", squaredInputs);
 	}
 }
